@@ -23,6 +23,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('catalog/', include('catalog.urls')),
+    # перенаправление на другой url
     path('', RedirectView.as_view(url='/catalog/', permanent=True)),
 ]
 
