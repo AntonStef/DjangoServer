@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Author: {{ author }}</h1>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Books</h4>
+    <!--возвращение связанных записей с book через set-->
+    <!--поскольку book ничего не знает про  bookinstance, поэтому создаетс обратная связь -->
+    <!-- all получить все -->
+    {% for book in author.book_set.all %}
+    <hr>
+    <a href="{{ book.get_absolute_url }}" style="font-size: 30px;" >{{ book.title }}</a>
+    <br>
+    {{ book.summary }}
+    {% endfor %}
+  </div>
+{% endblock %}
