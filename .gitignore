@@ -2,3 +2,4 @@
 myDjango/db.sqlite3
 venv
 *.pyc
+adminlogin.txt
