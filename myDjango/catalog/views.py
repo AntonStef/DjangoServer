@@ -20,8 +20,13 @@ def index(request):
 
     # Получить жанры, которые содержат ЖАС без учета регистра
     num_genre_my = Genre.objects.filter(name__icontains='ЖАС')
-    # Получить книги кGenreоторы содержат гарри без учета регистра
+    # Получить книги к Genre которые содержат гарри без учета регистра
     num_books_my = Book.objects.filter(title__icontains='ГарРи')
+
+    # добавдяем анализ сессии
+    # Number of visits to this view, as counted in the session variable.
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
 
     # Отрисовка HTML-шаблона index.html с данными внутри
     # переменной контекста context
@@ -30,7 +35,7 @@ def index(request):
         'index.html',
         context={'num_books': num_books, 'num_instances': num_instances,
                  'num_instances_available': num_instances_available, 'num_authors': num_authors,
-                 'num_genre_my': num_genre_my, 'num_books_my': num_books_my},
+                 'num_genre_my': num_genre_my, 'num_books_my': num_books_my, 'num_visits': num_visits},
     )
 
 

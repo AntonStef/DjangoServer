@@ -21,6 +21,9 @@
     <li><strong>Жанр содержащий строку ЖАС:</strong> {{ num_genre_my }}</li>
     <li><strong>Книга содержащий строку ГарРи:</strong> {{ num_books_my }}</li>
   </ul>
+
+  <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+
   <div>
     <img src="{% static 'catalog/images/library.jpg' %}" alt="">
   </div>
