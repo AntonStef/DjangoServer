@@ -101,7 +101,7 @@ class Author(models.Model):
 
     def get_absolute_url(self):
         """
-        Returns the url to access a particular author instance.
+        Returns the url to access a parorderingticular author instance.
         """
         return reverse('author-detail', args=[str(self.id)])
 
@@ -110,3 +110,8 @@ class Author(models.Model):
         String for representing the Model object.
         """
         return '%s, %s' % (self.last_name, self.first_name)
+
+    # можно сделать сортировку экземпляров при запросе queryset
+    # в данном случае по фамилии
+    class Meta:
+        ordering = ['last_name']
