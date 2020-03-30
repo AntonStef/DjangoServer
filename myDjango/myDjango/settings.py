@@ -131,3 +131,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
+
+# Это если при выходе автоматически перебрасывать на страницу логирования
+# LOGOUT_REDIRECT_URL = 'login'
+
+# Это регистрирует любые письма, отправленные на консоль (чтобы вы могли скопировать ссылку на сброс пароля с консоли)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
