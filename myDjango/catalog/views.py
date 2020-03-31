@@ -1,12 +1,17 @@
 from django.shortcuts import render
 from .models import *
 from django.views import generic
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 # render - функция которая генерирует HTML-файлы при помощи
 # шаблонов страниц и соотвествующих данных
 
 
 # Create your views here.
+# декоратор для аутентификации пользователя
+# работает для методов
+@login_required
 def index(request):
     """
     Функция отображения для домашней страницы сайта.
@@ -39,7 +44,19 @@ def index(request):
     )
 
 
-class BookListView(generic.ListView):
+# generic.ListView - чотбы выводился как список объектов
+# Это всё! Обобщенное отображение выполнит запрос к базе данных, получит все записи заданной модели (Book),
+# затем отрендерит (отрисует) соответствующий шаблон,
+# расположенный в /locallibrary/catalog/templates/catalog/book_list.html
+# если не указать queryset или не переопределить метод get_context_data,
+# то вернуться все записи Book.objects.all()
+class BookListView(LoginRequiredMixin, generic.ListView):
+    # указываем куда перенаправить пользователя если он не аутентифицирован
+    login_url = 'login'
+    # куда сделать перенаправление после авторизации redirect_field_name == next в шаблоне
+    # но мы этого не указываем поскольку в самой шаблоне мы
+    # поставили метку next и request.path что в случае успешной авторизации кидает нас обратно на последнюю страницу
+    # redirect_field_name = 'books'
     model = Book
     paginate_by = 4
 
@@ -66,13 +83,23 @@ class BookListView(generic.ListView):
         return context
 
 
+# Это всё! Все что вам надо теперь сделать это создать шаблон
+# с именем /locallibrary/catalog/templates/catalog/book_detail.html,
+# а отображение передаст ему информацию из базы данных для определенной записи Book,
+# выделенной при помощи URL-преобразования.
 class BookDetailView(generic.DetailView):
     model = Book
 
 
-class AuthorListView(generic.ListView):
+class AuthorListView(LoginRequiredMixin, generic.ListView):
     model = Author
     paginate_by = 2
+
+    # куда пересылать если пользователь не авторизован
+    login_url = 'login'
+    # куда отправлять если авторизован
+    # redirect_field_name = 'redirect_to'
+
 
     # ваше собственное имя переменной контекста в шаблоне
     context_object_name = 'author_list'
@@ -99,3 +126,32 @@ class AuthorListView(generic.ListView):
 
 class AuthorDetailView(generic.DetailView):
     model = Author
+
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    """
+    Generic class-based view listing books on loan to current user.
+    """
+    context_object_name = 'bookinstance_list'
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+
+
+class AllLoanedBooksForLibrarianView(PermissionRequiredMixin, generic.ListView):
+    """
+    Generic class-based view listing books on loan to current user.
+    """
+    model = BookInstance
+    # если не указать context_object_name, то он будет по умолчанию название модели + list
+    context_object_name = 'bookinstance_list_on_loan'
+    template_name = 'catalog/bookinstance_all_list_borrowed.html'
+    # указываем разрешения
+    permission_required = ('catalog.can_check_all_borrowed_books', )
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(status__exact='o').order_by('due_back')
