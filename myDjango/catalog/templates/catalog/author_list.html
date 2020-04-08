@@ -11,6 +11,10 @@
       {% for author in author_list %}
       <li>
         <a href="{{ author.get_absolute_url }}">{{ author }}</a>
+         {% if perms.catalog.can_update_create_delete_author %}
+         <a href="{% url 'author_update' author.id %}">| Update Author</a>
+         <a href="{% url 'author_delete' author.id %}">| Delete Author</a>
+        {% endif %}
       </li>
       {% endfor %}
 
@@ -18,4 +22,6 @@
     {% else %}
       <p>There are no authors</p>
     {% endif %}
+    <a href="{% url 'author_create' %}">Adding new Author</a>
+    <br>
 {% endblock %}
