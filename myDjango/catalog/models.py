@@ -61,6 +61,11 @@ class Book(models.Model):
 
     display_genre.short_description = 'Genre'
 
+    class Meta:
+        permissions = (
+            ("can_update_create_delete_book", "Access for update Book"),
+        )
+
 
 class BookInstance(models.Model):
     """
@@ -129,3 +134,8 @@ class Author(models.Model):
     # в данном случае по фамилии
     class Meta:
         ordering = ['last_name']
+        # определение (разрешение, отображение разрешения)
+        permissions = (
+            ("can_update_create_delete_author", "Access for update Author"),
+        )
+
