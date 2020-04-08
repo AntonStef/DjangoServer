@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+    <h1>Renew: {{bookinst.book.title}}</h1>
+    <p>Borrower: {{bookinst.borrower}}</p>
+    <p{% if bookinst.is_overdue %} class="text-danger"{% endif %}>Due date: {{bookinst.due_back}}</p>
+    
+    <form action="" method="post">
+        <!-- пустое значние атрибута action, означает, что данные из формы будут
+         переданы обратно по текущему URL-адресу данной страницы  (чего мы и хотим!). -->
+        {% csrf_token %}
+        <table>
+        <!-- В простом случае применения {{form}} как показано ниже, каждое поле рендерится  в виде отдельной строки таблицы.
+        Кроме того, вы можете отрендерить каждое поле как список элементов ({{form.as_ul}} ),
+        или как параграф ({{form.as_p}}).-->
+        {{ form }}
+        </table>
+        <input type="submit" value="Submit" />
+    </form>
+
+{% endblock %}

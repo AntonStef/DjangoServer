@@ -11,11 +11,17 @@
       {% for book in book_list %}
       <li>
         <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> ({{book.author}})
+       {% if perms.catalog.can_update_create_delete_author %}
+         <a href="{% url 'book_update' book.id %}">| Update Book</a>
+         <a href="{% url 'book_delete' book.id %}">| Delete Book</a>
+        {% endif %}
       </li>
       {% endfor %}
 
     </ul>
     {% else %}
       <p>There are no books in the library.</p>
-    {% endif %}       
+    {% endif %}
+    <a href="{% url 'book_create' %}">Adding new Book</a>
+    <br>
 {% endblock %}

@@ -26,7 +26,7 @@
       <br>
 
        {% for user_group in user.groups.all%}
-          <p style="font-size: 22px; font-weight: bold">Группы в которые входит пользователь {{user_group}}</p>
+          <p style="font-size: 14px; font-weight: bold">Группы в которые входит пользователь {{user_group}}</p>
        {% endfor %}
 
        <p>Пользователь является супер пользователем --> {{user.is_superuser}}</p>
