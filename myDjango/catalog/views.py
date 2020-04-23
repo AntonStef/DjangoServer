@@ -109,7 +109,7 @@ class BookDetailView(generic.DetailView):
 
 class AuthorListView(LoginRequiredMixin, generic.ListView):
     model = Author
-    paginate_by = 2
+    paginate_by = 3
 
     # куда пересылать если пользователь не авторизован
     login_url = 'login'
@@ -233,7 +233,9 @@ class AuthorCreate(PermissionRequiredMixin, CreateView):
     permission_required = ('catalog.can_update_create_delete_author', )
 
     fields = '__all__'
-    initial = {'date_of_death': '12/10/1500', }
+    initial = {
+        'date_of_birth': '12/10/1500',
+        'date_of_death': '12/10/1600'}
 
 
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):

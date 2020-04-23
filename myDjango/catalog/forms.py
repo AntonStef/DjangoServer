@@ -9,7 +9,8 @@ from .models import BookInstance
 
 # создание формы на основе класса Form
 class RenewBookForm(forms.Form):
-    renewal_date = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).", label='New date')
+    renewal_date = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).",
+                                   label='New date')
 
     # создаем дополнительную поля поля renewal_date из формы, что бы оно было не позже текущего дня
     # и не позже 4-х недель вперед
@@ -20,6 +21,7 @@ class RenewBookForm(forms.Form):
         # а затем, приведенные к стандартным типам, данные
         # в данном случае в datetime.datetime
         # print(type(self.cleaned_data['renewal_date']), self.cleaned_data['renewal_date'])
+        # print(self.cleaned_data)
         data = self.cleaned_data['renewal_date']
 
         # Проверка того, что дата не выходит за "нижнюю" границу (не в прошлом).
